@@ -7,12 +7,54 @@
 <ion-content [fullscreen]="true">
   <ion-header collapse="condense">
     <ion-toolbar>
-      <ion-title size="large">km_tracking</ion-title>
+      <ion-title size="large">KM Tracker</ion-title>
     </ion-toolbar>
   </ion-header>
 
-  <div class="ion-text-center">
+  <form>
+    <ion-item>
+      <!-- <ion-label position="stacked">Email</ion-label> -->
+      <!-- <ion-input
+        type="email"
+        name="email"
+        [(ngModel)]="email"
+        readonly
+      ></ion-input> -->
+
+      <ion-select placeholder="Select Vehicle">
+        <div slot="label">
+          Vehicle <ion-text color="danger">(Required)</ion-text>
+        </div>
+        <ion-select-option value="Cabstar">Cabstar</ion-select-option>
+        <ion-select-option value="Mazda">Mazda</ion-select-option>
+        <ion-select-option value="Kia">Kia</ion-select-option>
+        <ion-select-option value="Dyna">Dyna</ion-select-option>
+        <ion-select-option value="Tazz">Tazz</ion-select-option>
+      </ion-select>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="stacked">Kilometres</ion-label>
+      <ion-input type="number" name="kilometres"></ion-input>
+      <!-- [(ngModel)]="profile.username" -->
+    </ion-item>
+
+    <!-- <ion-item>
+      <ion-label position="stacked">Website</ion-label>
+      <ion-input
+        type="url"
+        name="website"
+        [(ngModel)]="profile.website"
+      ></ion-input>
+    </ion-item>
+    <div class="ion-text-center">
+      <ion-button fill="clear" (click)="updateProfile()"
+        >Update Profile</ion-button
+      >
+    </div> -->
+  </form>
+
+  <!-- <div class="ion-text-center">
     <ion-button fill="clear" (click)="signOut()">Log Out</ion-button>
-  </div>
-  
+  </div> -->
 </ion-content>
