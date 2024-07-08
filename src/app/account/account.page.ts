@@ -67,6 +67,7 @@ export class AccountPage implements OnInit {
     private readonly supabase: SupabaseService,
     private router: Router
   ) {}
+  
   ngOnInit() {
     this.getEmail();
     this.getProfile();

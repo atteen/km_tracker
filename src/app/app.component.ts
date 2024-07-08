@@ -16,8 +16,28 @@ export class AppComponent {
     this.supabase.authChanges((_, session) => {
       console.log(session);
       if (session?.user) {
-        this.router.navigate(['/account']);
+        this.checkProfileFilled();
+        // this.router.navigate(['/account']);
+        console.log(session?.user);
       }
     });
+  }
+
+  async checkProfileFilled() {
+    try {
+      const { data: profile, error, status } = await this.supabase.profile;
+      if (error && status !== 406) {
+        throw error;
+      }
+      if (profile) {
+        if (profile.username === '') {
+          this.router.navigate(['/account']);
+        } else {
+          this.router.navigate(['/km-tracking']);
+        }
+      }
+    } catch (error: any) {
+      alert(error.message);
+    }
   }
 }

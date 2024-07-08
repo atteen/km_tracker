@@ -12,6 +12,10 @@ const routes: Routes = [
     loadChildren: () =>
       import('./account/account.module').then((m) => m.AccountPageModule),
   },
+  {
+    path: 'km-tracking',
+    loadChildren: () => import('./km-tracking/km-tracking.module').then( m => m.KmTrackingPageModule)
+  },
 ];
 
 @NgModule({
