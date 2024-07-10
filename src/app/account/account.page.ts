@@ -1,64 +1,25 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { Profile, SupabaseService } from '../supabase.service';
+import { IonModal } from '@ionic/angular';
+import { OverlayEventDetail } from '@ionic/core/components';
+import { Driver, Vehicle } from '../models';
 
 @Component({
   selector: 'app-account',
-  template: `
-    <ion-header>
-      <ion-toolbar>
-        <ion-title>Account</ion-title>
-      </ion-toolbar>
-    </ion-header>
-
-    <ion-content>
-      <form>
-        <ion-item>
-          <ion-label position="stacked">Email</ion-label>
-          <ion-input
-            type="email"
-            name="email"
-            [(ngModel)]="email"
-            readonly
-          ></ion-input>
-        </ion-item>
-
-        <ion-item>
-          <ion-label position="stacked">Name</ion-label>
-          <ion-input
-            type="text"
-            name="username"
-            [(ngModel)]="profile.username"
-          ></ion-input>
-        </ion-item>
-
-        <ion-item>
-          <ion-label position="stacked">Website</ion-label>
-          <ion-input
-            type="url"
-            name="website"
-            [(ngModel)]="profile.website"
-          ></ion-input>
-        </ion-item>
-        <div class="ion-text-center">
-          <ion-button fill="clear" (click)="updateProfile()"
-            >Update Profile</ion-button
-          >
-        </div>
-      </form>
-
-      <div class="ion-text-center">
-        <ion-button fill="clear" (click)="signOut()">Log Out</ion-button>
-      </div>
-
-      <div class="ion-text-center">
-        <ion-button fill="clear" (click)="logIt()">Log vehicles</ion-button>
-      </div>
-    </ion-content>
-  `,
+  templateUrl: './account.page.html',
   styleUrls: ['./account.page.scss'],
 })
 export class AccountPage implements OnInit {
+  drivers: Driver[] = [];
+  vehicles: Vehicle[] = [];
+
+  trip = {
+    driverId: '',
+    vehicleId: '',
+    kilometers: 0,
+  };
+
   profile: Profile = {
     username: '',
     avatar_url: '',
@@ -71,9 +32,15 @@ export class AccountPage implements OnInit {
     private readonly supabase: SupabaseService,
     private router: Router
   ) {}
-  ngOnInit() {
+
+  @ViewChild(IonModal) modal!: IonModal;
+
+  async ngOnInit() {
     this.getEmail();
     this.getProfile();
+    this.drivers = await this.supabase.getDrivers();
+    this.vehicles = await this.supabase.getVehicles();
+    console.log(this.vehicles);
   }
 
   async getEmail() {
@@ -94,7 +61,28 @@ export class AccountPage implements OnInit {
     }
   }
 
-  async updateProfile(avatar_url: string = '') {
+  async logTrip() {
+    const { driverId, vehicleId, kilometers } = this.trip;
+    await this.supabase.logTrip(driverId, vehicleId, kilometers);
+  }
+
+  async signOut() {
+    console.log('testing?');
+    await this.supabase.signOut();
+    this.router.navigate(['/'], { replaceUrl: true });
+  }
+
+  // async logIt() {
+  //   this.router.navigate(['/log-trip'], { replaceUrl: true });
+  // }
+
+  name!: string;
+
+  cancel() {
+    this.modal.dismiss(null, 'cancel');
+  }
+
+  async confirm(avatar_url: string = '') {
     const loader = await this.supabase.createLoader();
     await loader.present();
     try {
@@ -111,15 +99,14 @@ export class AccountPage implements OnInit {
       await loader.dismiss();
       await this.supabase.createNotice(error.message);
     }
+
+    this.modal.dismiss(this.name, 'confirm');
   }
 
-  async signOut() {
-    console.log('testing?');
-    await this.supabase.signOut();
-    this.router.navigate(['/'], { replaceUrl: true });
-  }
-
-  async logIt() {
-    this.router.navigate(['/log-trip'], { replaceUrl: true });
+  onWillDismiss(event: Event) {
+    const ev = event as CustomEvent<OverlayEventDetail<string>>;
+    // if (ev.detail.role === 'confirm') {
+    //   this.message = `Hello, ${ev.detail.data}!`;
+    // }
   }
 }

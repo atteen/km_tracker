@@ -1,13 +1,102 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
-    <ion-title>account</ion-title>
+    <ion-row>
+      <ion-title>Home</ion-title>
+      <ion-button id="open-modal" expand="block">Update profile</ion-button>
+    </ion-row>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">account</ion-title>
-    </ion-toolbar>
-  </ion-header>
+
+  <form (submit)="logTrip()">
+    <ion-item>
+      <ion-label>Driver</ion-label>
+      <ion-select [(ngModel)]="trip.driverId" name="driver">
+        <ion-select-option *ngFor="let driver of drivers" [value]="driver.id"
+          >{{ driver.username }}</ion-select-option
+        >
+      </ion-select>
+    </ion-item>
+
+    <ion-item>
+      <ion-label>Vehicle</ion-label>
+      <ion-select [(ngModel)]="trip.vehicleId" name="vehicle">
+        <ion-select-option *ngFor="let vehicle of vehicles" [value]="vehicle.id"
+          >{{ vehicle.name }}</ion-select-option
+        >
+      </ion-select>
+    </ion-item>
+
+    <ion-item>
+      <ion-label>Kilometers</ion-label>
+      <ion-input
+        type="number"
+        [(ngModel)]="trip.kilometers"
+        name="kilometers"
+      ></ion-input>
+    </ion-item>
+
+    <ion-button expand="full" type="submit">Log Trip</ion-button>
+  </form>
+
+  <!-- <div class="ion-text-center">
+    <ion-button fill="clear" (click)="logIt()">Log vehicles</ion-button>
+  </div> -->
+
+  <ion-modal trigger="open-modal" (willDismiss)="onWillDismiss($event)">
+    <ng-template>
+      <ion-header>
+        <ion-toolbar>
+          <ion-buttons slot="start">
+            <ion-button (click)="cancel()">Cancel</ion-button>
+          </ion-buttons>
+          <ion-title>Welcome</ion-title>
+          <ion-buttons slot="end">
+            <ion-button (click)="confirm()" [strong]="true">Confirm</ion-button>
+          </ion-buttons>
+        </ion-toolbar>
+      </ion-header>
+      <ion-content class="ion-padding">
+        <form>
+          <ion-item>
+            <ion-label position="stacked">Email</ion-label>
+            <ion-input
+              type="email"
+              name="email"
+              [(ngModel)]="email"
+              readonly
+            ></ion-input>
+          </ion-item>
+
+          <ion-item>
+            <ion-label position="stacked">Name</ion-label>
+            <ion-input
+              type="text"
+              name="username"
+              [(ngModel)]="profile.username"
+            ></ion-input>
+          </ion-item>
+
+          <ion-item>
+            <ion-label position="stacked">Website</ion-label>
+            <ion-input
+              type="url"
+              name="website"
+              [(ngModel)]="profile.website"
+            ></ion-input>
+          </ion-item>
+          <!-- <div class="ion-text-center">
+            <ion-button fill="clear" (click)="updateProfile()"
+              >Update Profile</ion-button
+            >
+          </div> -->
+        </form>
+
+        <div class="ion-text-center">
+          <ion-button fill="clear" (click)="signOut()">Log Out</ion-button>
+        </div>
+      </ion-content>
+    </ng-template>
+  </ion-modal>
 </ion-content>

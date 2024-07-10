@@ -5,34 +5,5 @@
 </ion-header>
 
 <ion-content>
-  <form (submit)="logTrip()">
-    <ion-item>
-      <ion-label>Driver</ion-label>
-      <ion-select [(ngModel)]="trip.driverId" name="driver">
-        <ion-select-option *ngFor="let driver of drivers" [value]="driver.id"
-          >{{ driver.username }}</ion-select-option
-        >
-      </ion-select>
-    </ion-item>
-
-    <ion-item>
-      <ion-label>Vehicle</ion-label>
-      <ion-select [(ngModel)]="trip.vehicleId" name="vehicle">
-        <ion-select-option *ngFor="let vehicle of vehicles" [value]="vehicle.id"
-          >{{ vehicle.name }}</ion-select-option
-        >
-      </ion-select>
-    </ion-item>
-
-    <ion-item>
-      <ion-label>Kilometers</ion-label>
-      <ion-input
-        type="number"
-        [(ngModel)]="trip.kilometers"
-        name="kilometers"
-      ></ion-input>
-    </ion-item>
-
-    <ion-button expand="full" type="submit">Log Trip</ion-button>
-  </form>
+  
 </ion-content>
