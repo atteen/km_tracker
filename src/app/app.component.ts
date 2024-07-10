@@ -14,7 +14,6 @@ import { SupabaseService } from './supabase.service';
 export class AppComponent {
   constructor(private supabase: SupabaseService, private router: Router) {
     this.supabase.authChanges((_, session) => {
-      console.log(session);
       if (session?.user) {
         this.router.navigate(['/account']);
       }

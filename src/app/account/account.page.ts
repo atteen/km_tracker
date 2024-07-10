@@ -40,7 +40,6 @@ export class AccountPage implements OnInit {
     this.getProfile();
     this.drivers = await this.supabase.getDrivers();
     this.vehicles = await this.supabase.getVehicles();
-    console.log(this.vehicles);
   }
 
   async getEmail() {
@@ -62,8 +61,8 @@ export class AccountPage implements OnInit {
   }
 
   async logTrip() {
-    const { driverId, vehicleId, kilometers } = this.trip;
-    await this.supabase.logTrip(driverId, vehicleId, kilometers);
+    const { vehicleId, kilometers } = this.trip;
+    await this.supabase.logTrip(vehicleId, kilometers);
   }
 
   async signOut() {

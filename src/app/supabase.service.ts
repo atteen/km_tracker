@@ -113,14 +113,11 @@ export class SupabaseService {
     return data as Vehicle[];
   }
 
-  async logTrip(
-    driverId: string,
-    vehicleId: string,
-    kilometers: number
-  ): Promise<Trip> {
+  async logTrip(vehicleId: string, kilometers: number): Promise<Trip> {
+    const user = await this.user;
     const { data, error } = await this.supabase
       .from('trips')
-      .insert([{ driver_id: driverId, vehicle_id: vehicleId, kilometers }])
+      .insert([{ driver_id: user?.id, vehicle_id: vehicleId, kilometers }])
       .single();
 
     if (error) {

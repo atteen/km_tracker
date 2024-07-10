@@ -7,17 +7,20 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
+<div>
+  <ion-item> Logged in as {{ profile.username }} </ion-item>
+</div>
 
+<ion-content [fullscreen]="true">
   <form (submit)="logTrip()">
-    <ion-item>
+    <!-- <ion-item>
       <ion-label>Driver</ion-label>
       <ion-select [(ngModel)]="trip.driverId" name="driver">
         <ion-select-option *ngFor="let driver of drivers" [value]="driver.id"
           >{{ driver.username }}</ion-select-option
         >
       </ion-select>
-    </ion-item>
+    </ion-item> -->
 
     <ion-item>
       <ion-label>Vehicle</ion-label>
