@@ -50,6 +50,10 @@ import { Profile, SupabaseService } from '../supabase.service';
       <div class="ion-text-center">
         <ion-button fill="clear" (click)="signOut()">Log Out</ion-button>
       </div>
+
+      <div class="ion-text-center">
+        <ion-button fill="clear" (click)="logIt()">Log vehicles</ion-button>
+      </div>
     </ion-content>
   `,
   styleUrls: ['./account.page.scss'],
@@ -113,5 +117,9 @@ export class AccountPage implements OnInit {
     console.log('testing?');
     await this.supabase.signOut();
     this.router.navigate(['/'], { replaceUrl: true });
+  }
+
+  async logIt() {
+    this.router.navigate(['/log-trip'], { replaceUrl: true });
   }
 }
