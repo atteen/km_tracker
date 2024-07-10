@@ -11,10 +11,8 @@ const routes: Routes = [
     path: 'account',
     loadChildren: () =>
       import('./account/account.module').then((m) => m.AccountPageModule),
-  },  {
-    path: 'log-trip',
-    loadChildren: () => import('./log-trip/log-trip.module').then( m => m.LogTripPageModule)
   },
+
 
 ];
 
