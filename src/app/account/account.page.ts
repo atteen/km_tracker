@@ -53,7 +53,9 @@ export class AccountPage implements OnInit {
 
     // Subscribe to vehicleId changes
     this.tripForm.get('vehicleId')?.valueChanges.subscribe((vehicleId) => {
-      const selectedVehicle = this.vehicles.find(vehicle => vehicle.id === vehicleId);
+      const selectedVehicle = this.vehicles.find(
+        (vehicle) => vehicle.id === vehicleId
+      );
       if (selectedVehicle) {
         this.tripForm.get('kilometers')?.setValue(selectedVehicle.current_km);
       }
@@ -87,6 +89,7 @@ export class AccountPage implements OnInit {
     try {
       const { vehicleId, kilometers, job } = this.tripForm.value;
       await this.supabase.logTrip(vehicleId, kilometers, job);
+      await this.supabase.updateVehicleKm(vehicleId, kilometers); // Update the vehicle's kilometers
       await loader.dismiss();
       await this.supabase.createNotice('Trip Logged!');
     } catch (error: any) {
@@ -109,7 +112,11 @@ export class AccountPage implements OnInit {
     const loader = await this.supabase.createLoader();
     await loader.present();
     try {
-      const updatedProfile = { ...this.profile, ...this.profileForm.value, avatar_url };
+      const updatedProfile = {
+        ...this.profile,
+        ...this.profileForm.value,
+        avatar_url,
+      };
       const { error } = await this.supabase.updateProfile(updatedProfile);
       if (error) {
         throw error;

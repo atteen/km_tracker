@@ -126,4 +126,15 @@ export class SupabaseService {
 
     return data as Trip;
   }
+
+  async updateVehicleKm(vehicleId: string, kilometers: number): Promise<void> {
+    const { error } = await this.supabase
+      .from('vehicles')
+      .update({ current_km: kilometers })
+      .eq('id', vehicleId);
+    
+    if (error) {
+      throw error;
+    }
+  }
 }
