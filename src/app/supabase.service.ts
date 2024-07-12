@@ -113,14 +113,11 @@ export class SupabaseService {
     return data as Vehicle[];
   }
 
-  async logTrip(
-    driverId: string,
-    vehicleId: string,
-    kilometers: number
-  ): Promise<Trip> {
+  async logTrip(vehicleId: string, kilometers: number, job: string): Promise<Trip> {
+    const user = await this.user;
     const { data, error } = await this.supabase
       .from('trips')
-      .insert([{ driver_id: driverId, vehicle_id: vehicleId, kilometers }])
+      .insert([{ driver_id: user?.id, vehicle_id: vehicleId, kilometers, job }])
       .single();
 
     if (error) {
@@ -128,5 +125,16 @@ export class SupabaseService {
     }
 
     return data as Trip;
+  }
+
+  async updateVehicleKm(vehicleId: string, kilometers: number): Promise<void> {
+    const { error } = await this.supabase
+      .from('vehicles')
+      .update({ current_km: kilometers })
+      .eq('id', vehicleId);
+    
+    if (error) {
+      throw error;
+    }
   }
 }

@@ -7,42 +7,44 @@
   </ion-toolbar>
 </ion-header>
 
+<div>
+  <ion-item> Logged in as {{ profile.username }} </ion-item>
+</div>
+
 <ion-content [fullscreen]="true">
-
-  <form (submit)="logTrip()">
-    <ion-item>
-      <ion-label>Driver</ion-label>
-      <ion-select [(ngModel)]="trip.driverId" name="driver">
-        <ion-select-option *ngFor="let driver of drivers" [value]="driver.id"
-          >{{ driver.username }}</ion-select-option
-        >
-      </ion-select>
-    </ion-item>
-
+  <form [formGroup]="tripForm" (ngSubmit)="logTrip()">
     <ion-item>
       <ion-label>Vehicle</ion-label>
-      <ion-select [(ngModel)]="trip.vehicleId" name="vehicle">
-        <ion-select-option *ngFor="let vehicle of vehicles" [value]="vehicle.id"
-          >{{ vehicle.name }}</ion-select-option
+      <ion-select formControlName="vehicleId">
+        <ion-select-option
+          *ngFor="let vehicle of vehicles"
+          [value]="vehicle.id"
         >
+          {{ vehicle.name }}
+        </ion-select-option>
       </ion-select>
     </ion-item>
 
     <ion-item>
       <ion-label>Kilometers</ion-label>
       <ion-input
+        class="ion-padding-horizontal"
         type="number"
-        [(ngModel)]="trip.kilometers"
-        name="kilometers"
+        formControlName="kilometers"
+      ></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label>Job</ion-label>
+      <ion-input
+        class="ion-padding-horizontal"
+        type="text"
+        formControlName="job"
       ></ion-input>
     </ion-item>
 
     <ion-button expand="full" type="submit">Log Trip</ion-button>
   </form>
-
-  <!-- <div class="ion-text-center">
-    <ion-button fill="clear" (click)="logIt()">Log vehicles</ion-button>
-  </div> -->
 
   <ion-modal trigger="open-modal" (willDismiss)="onWillDismiss($event)">
     <ng-template>
@@ -58,39 +60,25 @@
         </ion-toolbar>
       </ion-header>
       <ion-content class="ion-padding">
-        <form>
+        <form [formGroup]="profileForm">
           <ion-item>
             <ion-label position="stacked">Email</ion-label>
             <ion-input
               type="email"
-              name="email"
-              [(ngModel)]="email"
+              formControlName="email"
               readonly
             ></ion-input>
           </ion-item>
 
           <ion-item>
             <ion-label position="stacked">Name</ion-label>
-            <ion-input
-              type="text"
-              name="username"
-              [(ngModel)]="profile.username"
-            ></ion-input>
+            <ion-input type="text" formControlName="username"></ion-input>
           </ion-item>
 
           <ion-item>
             <ion-label position="stacked">Website</ion-label>
-            <ion-input
-              type="url"
-              name="website"
-              [(ngModel)]="profile.website"
-            ></ion-input>
+            <ion-input type="url" formControlName="website"></ion-input>
           </ion-item>
-          <!-- <div class="ion-text-center">
-            <ion-button fill="clear" (click)="updateProfile()"
-              >Update Profile</ion-button
-            >
-          </div> -->
         </form>
 
         <div class="ion-text-center">

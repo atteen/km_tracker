@@ -8,6 +8,7 @@ export interface Vehicle {
   id: string;
   name: string;
   license_plate: string;
+  current_km: number;
 }
 
 export interface Trip {
