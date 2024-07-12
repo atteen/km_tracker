@@ -15,9 +15,9 @@ export class AccountPage implements OnInit {
   vehicles: Vehicle[] = [];
 
   trip = {
-    driverId: '',
     vehicleId: '',
     kilometers: 0,
+    job: '',
   };
 
   profile: Profile = {
@@ -61,8 +61,18 @@ export class AccountPage implements OnInit {
   }
 
   async logTrip() {
-    const { vehicleId, kilometers } = this.trip;
-    await this.supabase.logTrip(vehicleId, kilometers);
+    const loader = await this.supabase.createLoader();
+    await loader.present();
+
+    try {
+      const { vehicleId, kilometers, job } = this.trip;
+      await this.supabase.logTrip(vehicleId, kilometers, job);
+      await loader.dismiss();
+      await this.supabase.createNotice('Trip Logged!');
+    } catch (error: any) {
+      await loader.dismiss();
+      await this.supabase.createNotice(error.message);
+    }
   }
 
   async signOut() {
