@@ -47,7 +47,7 @@ export class AccountPage implements OnInit {
   ) {
     this.tripForm = new FormGroup({
       vehicleId: new FormControl(''),
-      kilometers: new FormControl(0, [
+      kilometers: new FormControl(null, [
         Validators.required,
         this.kilometersValidator(),
       ]),
