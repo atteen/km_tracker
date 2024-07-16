@@ -14,3 +14,11 @@
     padding: 5px 5px 5px 0;
 }
 
+ion-item.invalid {
+    --highlight-background: var(--ion-color-danger, #f1453d);
+}
+
+ion-item {
+    --highlight-color-invalid: var(--ion-color-primary);
+}
+

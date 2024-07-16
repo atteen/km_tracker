@@ -1,6 +1,12 @@
-import { Component, OnInit, ViewChild, ChangeDetectorRef  } from '@angular/core';
+import { Component, OnInit, ViewChild, ChangeDetectorRef } from '@angular/core';
 import { Router } from '@angular/router';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
+import {
+  FormGroup,
+  FormControl,
+  Validators,
+  ValidatorFn,
+  AbstractControl,
+} from '@angular/forms';
 import { Profile, SupabaseService } from '../supabase.service';
 import { IonModal } from '@ionic/angular';
 import { OverlayEventDetail } from '@ionic/core/components';
@@ -19,8 +25,12 @@ export class AccountPage implements OnInit {
   profileForm: FormGroup;
 
   errors = [
-    {type: 'required', message: 'field cannot be empty'}
-  ]
+    { type: 'required', message: 'field cannot be empty' },
+    {
+      type: 'invalidKilometers',
+      message: 'Km cannot be less than the current km',
+    },
+  ];
 
   profile: Profile = {
     username: '',
@@ -37,7 +47,10 @@ export class AccountPage implements OnInit {
   ) {
     this.tripForm = new FormGroup({
       vehicleId: new FormControl(''),
-      kilometers: new FormControl(0, Validators.required),
+      kilometers: new FormControl(0, [
+        Validators.required,
+        this.kilometersValidator(),
+      ]),
       job: new FormControl('', Validators.required),
     });
 
@@ -64,14 +77,28 @@ export class AccountPage implements OnInit {
       if (selectedVehicle) {
         this.tripForm.get('kilometers')?.setValue(selectedVehicle.current_km);
       }
+      this.tripForm.get('kilometers')?.updateValueAndValidity(); // Update validity when vehicle changes
     });
 
-    this.tripForm.get('job')?.valueChanges.subscribe(value => {
+    this.tripForm.get('job')?.valueChanges.subscribe((value) => {
+      this.cdr.detectChanges();
+    });
+    this.tripForm.get('kilometers')?.valueChanges.subscribe((value) => {
       this.cdr.detectChanges(); // Manually trigger change detection
     });
-    this.tripForm.get('kilometers')?.valueChanges.subscribe(value => {
-      this.cdr.detectChanges(); // Manually trigger change detection
-    });
+  }
+
+  kilometersValidator(): ValidatorFn {
+    return (control: AbstractControl): { [key: string]: any } | null => {
+      const vehicleId = this.tripForm?.get('vehicleId')?.value;
+      const selectedVehicle = this.vehicles.find(
+        (vehicle) => vehicle.id === vehicleId
+      );
+      if (selectedVehicle && control.value < selectedVehicle.current_km) {
+        return { invalidKilometers: true };
+      }
+      return null;
+    };
   }
 
   async getEmail() {
