@@ -1,6 +1,6 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, ChangeDetectorRef  } from '@angular/core';
 import { Router } from '@angular/router';
-import { FormGroup, FormControl } from '@angular/forms';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Profile, SupabaseService } from '../supabase.service';
 import { IonModal } from '@ionic/angular';
 import { OverlayEventDetail } from '@ionic/core/components';
@@ -18,6 +18,10 @@ export class AccountPage implements OnInit {
   tripForm: FormGroup;
   profileForm: FormGroup;
 
+  errors = [
+    {type: 'required', message: 'field cannot be empty'}
+  ]
+
   profile: Profile = {
     username: '',
     avatar_url: '',
@@ -28,12 +32,13 @@ export class AccountPage implements OnInit {
 
   constructor(
     private readonly supabase: SupabaseService,
-    private router: Router
+    private router: Router,
+    private cdr: ChangeDetectorRef
   ) {
     this.tripForm = new FormGroup({
       vehicleId: new FormControl(''),
-      kilometers: new FormControl(0),
-      job: new FormControl(''),
+      kilometers: new FormControl(0, Validators.required),
+      job: new FormControl('', Validators.required),
     });
 
     this.profileForm = new FormGroup({
@@ -59,6 +64,13 @@ export class AccountPage implements OnInit {
       if (selectedVehicle) {
         this.tripForm.get('kilometers')?.setValue(selectedVehicle.current_km);
       }
+    });
+
+    this.tripForm.get('job')?.valueChanges.subscribe(value => {
+      this.cdr.detectChanges(); // Manually trigger change detection
+    });
+    this.tripForm.get('kilometers')?.valueChanges.subscribe(value => {
+      this.cdr.detectChanges(); // Manually trigger change detection
     });
   }
 
