@@ -33,15 +33,40 @@
         formControlName="kilometers"
       ></ion-input>
     </ion-item>
-
-    <ion-item>
-      <ion-label>Job</ion-label>
-      <ion-input
+    <div *ngFor="let er of errors" class="validation-errors">
+      <div
         class="ion-padding-horizontal"
-        type="text"
-        formControlName="job"
-      ></ion-input>
-    </ion-item>
+        *ngIf="tripForm.get('kilometers')?.hasError(er.type) && (tripForm.get('kilometers')?.dirty || tripForm.get('kilometers')?.touched)"
+      >
+        <span class="error-message"><ion-icon class="error-icon" name="information-circle-outline" /> {{ er.message }}</span>
+      </div>
+    </div>
+
+    <ng-container>
+      <ion-item class="input-error">
+        <label>Job</label>
+        <ion-input
+          class="ion-padding-horizontal"
+          type="text"
+          formControlName="job"
+        />
+      </ion-item>
+      <div *ngFor="let er of errors" class="validation-errors">
+        <div
+          class="ion-padding-horizontal"
+          *ngIf="tripForm.get('job')?.hasError(er.type) && (tripForm.get('job')?.dirty || tripForm.get('job')?.touched)"
+        >
+          <span class="error-message"><ion-icon class="error-icon" name="information-circle-outline" /> {{ er.message }}</span>
+        </div>
+      </div>
+    </ng-container>
+
+    <!-- <div>
+      <p>Form Status: {{ tripForm.status }}</p>
+      <p>Job Field Status: {{ tripForm.get('job')?.status }}</p>
+      <p>Job Field Value: {{ tripForm.get('job')?.value }}</p>
+      <p>Job Field Errors: {{ tripForm.get('job')?.errors | json }}</p>
+    </div> -->
 
     <ion-button expand="full" type="submit">Log Trip</ion-button>
   </form>

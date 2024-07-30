@@ -1,0 +1,24 @@
+
+.validation-errors {
+    color: var(--ion-color-danger, #f1453d);
+}
+
+.error-message {
+    display: flex;
+    align-items: center;
+}
+
+.error-icon {
+    display: flex;
+    align-self: center;
+    padding: 5px 5px 5px 0;
+}
+
+ion-item.invalid {
+    --highlight-background: var(--ion-color-danger, #f1453d);
+}
+
+ion-item {
+    --highlight-color-invalid: var(--ion-color-primary);
+}
+
