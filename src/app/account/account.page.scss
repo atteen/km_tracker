@@ -1,24 +1,36 @@
+@font-face {
+  font-family: "CustomFont"; /* Name your font family */
+  src: url("../../assets/fonts/cy-grotesk-grand-regular.ttf"); /* Locate the .ttf file within your directory*/
+}
 
 .validation-errors {
-    color: var(--ion-color-danger, #f1453d);
+  color: var(--ion-color-danger, #f1453d);
 }
 
 .error-message {
-    display: flex;
-    align-items: center;
+  display: flex;
+  align-items: center;
 }
 
 .error-icon {
-    display: flex;
-    align-self: center;
-    padding: 5px 5px 5px 0;
+  display: flex;
+  align-self: center;
+  padding: 5px 5px 5px 0;
 }
 
 ion-item.invalid {
-    --highlight-background: var(--ion-color-danger, #f1453d);
+  --highlight-background: var(--ion-color-danger, #f1453d);
 }
 
 ion-item {
-    --highlight-color-invalid: var(--ion-color-primary);
+  --highlight-color-invalid: var(--ion-color-primary);
 }
 
+ion-title {
+  font-family: "CustomFont", sans-serif;
+}
+
+.icon {
+  height: 50px;
+  padding: 5px 5px 0;
+}

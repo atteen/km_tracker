@@ -138,9 +138,17 @@ export class AccountPage implements OnInit {
   }
 
   async signOut() {
-    console.log('testing?');
-    await this.supabase.signOut();
-    this.router.navigate(['/'], { replaceUrl: true });
+    const loader = await this.supabase.createLoader();
+    await loader.present();
+
+    try {
+      await this.supabase.signOut();
+      this.router.navigate(['/'], { replaceUrl: true });
+      await loader.dismiss();
+      await this.supabase.createNotice('Logged Out');
+    } catch (error: any) {
+
+    }
   }
 
   cancel() {
