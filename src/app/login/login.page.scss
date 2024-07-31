@@ -1,0 +1,16 @@
+@font-face {
+    font-family: 'CustomFont'; /* Name your font family */
+    src: url('../../assets/fonts/cy-grotesk-grand-regular.ttf'); /* Locate the .ttf file within your directory*/
+  }
+
+.icon {
+    height: 64px;
+    padding-right: 5px;
+}
+
+.logo-text {
+    font-family: 'CustomFont', sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
