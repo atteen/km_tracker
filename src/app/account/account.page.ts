@@ -68,6 +68,7 @@ export class AccountPage implements OnInit {
     this.getProfile();
     this.drivers = await this.supabase.getDrivers();
     this.vehicles = await this.supabase.getVehicles();
+    console.log(this.vehicles);
 
     // Subscribe to vehicleId changes
     this.tripForm.get('vehicleId')?.valueChanges.subscribe((vehicleId) => {
@@ -146,9 +147,7 @@ export class AccountPage implements OnInit {
       this.router.navigate(['/'], { replaceUrl: true });
       await loader.dismiss();
       await this.supabase.createNotice('Logged Out');
-    } catch (error: any) {
-
-    }
+    } catch (error: any) {}
   }
 
   cancel() {
