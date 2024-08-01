@@ -69,6 +69,17 @@ export class AccountPage implements OnInit {
     this.drivers = await this.supabase.getDrivers();
     this.vehicles = await this.supabase.getVehicles();
 
+    // // Subscribe to vehicleId changes
+    // this.tripForm.get('vehicleId')?.valueChanges.subscribe((vehicleId) => {
+    //   const selectedVehicle = this.vehicles.find(
+    //     (vehicle) => vehicle.id === vehicleId
+    //   );
+    //   if (selectedVehicle) {
+    //     this.tripForm.get('kilometers')?.setValue(selectedVehicle.current_km);
+    //   }
+    //   this.tripForm.get('kilometers')?.updateValueAndValidity(); // Update validity when vehicle changes
+    // });
+
     this.tripForm.get('job')?.valueChanges.subscribe((value) => {
       this.cdr.detectChanges();
     });
@@ -77,17 +88,17 @@ export class AccountPage implements OnInit {
     });
   }
 
-  getKms() {
-    // Subscribe to vehicleId changes
-    this.tripForm.get('vehicleId')?.valueChanges.subscribe((vehicleId) => {
-      const selectedVehicle = this.vehicles.find(
-        (vehicle) => vehicle.id === vehicleId
-      );
-      if (selectedVehicle) {
-        this.tripForm.get('kilometers')?.setValue(selectedVehicle.current_km);
-      }
-      this.tripForm.get('kilometers')?.updateValueAndValidity(); // Update validity when vehicle changes
-    });
+  onVehicleChange(event: any) {
+    const vehicleId = event.detail.value; // Get the selected vehicle ID from the event
+    const selectedVehicle = this.vehicles.find(
+      (vehicle) => vehicle.id === vehicleId
+    );
+  
+    if (selectedVehicle) {
+      this.tripForm.get('kilometers')?.setValue(selectedVehicle.current_km);
+    }
+  
+    this.tripForm.get('kilometers')?.updateValueAndValidity();
   }
 
   kilometersValidator(): ValidatorFn {

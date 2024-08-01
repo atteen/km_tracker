@@ -19,7 +19,7 @@
   <form class="ion-margin" [formGroup]="tripForm" (ngSubmit)="logTrip()">
     <ion-item>
       <ion-label>Vehicle</ion-label>
-      <ion-select formControlName="vehicleId" (click)="getKms()">
+      <ion-select formControlName="vehicleId" (ionChange)="onVehicleChange($event)">
         <ion-select-option
           *ngFor="let vehicle of vehicles"
           [value]="vehicle.id"
