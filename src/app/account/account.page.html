@@ -2,11 +2,10 @@
   <ion-toolbar>
     <ion-row class="ion-padding-horizontal">
       <img
-          class="icon"
-          src="../../assets/icon/msasmanlogo-removebg-preview.png"
-      >
-      <ion-title class="page-title"
-        >MSB</ion-title>
+        class="icon"
+        src="../../assets/icon/msasmanlogo-removebg-preview.png"
+      />
+      <ion-title class="page-title">MSB</ion-title>
       <ion-button id="open-modal" expand="block">Update profile</ion-button>
     </ion-row>
   </ion-toolbar>
@@ -20,7 +19,7 @@
   <form class="ion-margin" [formGroup]="tripForm" (ngSubmit)="logTrip()">
     <ion-item>
       <ion-label>Vehicle</ion-label>
-      <ion-select formControlName="vehicleId">
+      <ion-select formControlName="vehicleId" (click)="getKms()">
         <ion-select-option
           *ngFor="let vehicle of vehicles"
           [value]="vehicle.id"
