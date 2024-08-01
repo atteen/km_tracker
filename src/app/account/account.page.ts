@@ -68,8 +68,16 @@ export class AccountPage implements OnInit {
     this.getProfile();
     this.drivers = await this.supabase.getDrivers();
     this.vehicles = await this.supabase.getVehicles();
-    console.log(this.vehicles);
 
+    this.tripForm.get('job')?.valueChanges.subscribe((value) => {
+      this.cdr.detectChanges();
+    });
+    this.tripForm.get('kilometers')?.valueChanges.subscribe((value) => {
+      this.cdr.detectChanges(); // Manually trigger change detection
+    });
+  }
+
+  getKms() {
     // Subscribe to vehicleId changes
     this.tripForm.get('vehicleId')?.valueChanges.subscribe((vehicleId) => {
       const selectedVehicle = this.vehicles.find(
@@ -79,13 +87,6 @@ export class AccountPage implements OnInit {
         this.tripForm.get('kilometers')?.setValue(selectedVehicle.current_km);
       }
       this.tripForm.get('kilometers')?.updateValueAndValidity(); // Update validity when vehicle changes
-    });
-
-    this.tripForm.get('job')?.valueChanges.subscribe((value) => {
-      this.cdr.detectChanges();
-    });
-    this.tripForm.get('kilometers')?.valueChanges.subscribe((value) => {
-      this.cdr.detectChanges(); // Manually trigger change detection
     });
   }
 
