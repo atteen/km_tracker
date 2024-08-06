@@ -74,7 +74,7 @@
     <ion-button expand="full" type="submit">Log Trip</ion-button>
   </form>
 
-  <ion-modal trigger="open-modal" (willDismiss)="onWillDismiss($event)">
+  <ion-modal trigger="open-modal" [isOpen]="isModalOpen" (willDismiss)="onWillDismiss($event)">
     <ng-template>
       <ion-header>
         <ion-toolbar class="ion-text-center">
