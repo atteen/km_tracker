@@ -39,6 +39,7 @@ export class AccountPage implements OnInit {
   };
 
   email = '';
+  isModalOpen = false;
 
   constructor(
     private readonly supabase: SupabaseService,
@@ -68,17 +69,7 @@ export class AccountPage implements OnInit {
     this.getProfile();
     this.drivers = await this.supabase.getDrivers();
     this.vehicles = await this.supabase.getVehicles();
-
-    // // Subscribe to vehicleId changes
-    // this.tripForm.get('vehicleId')?.valueChanges.subscribe((vehicleId) => {
-    //   const selectedVehicle = this.vehicles.find(
-    //     (vehicle) => vehicle.id === vehicleId
-    //   );
-    //   if (selectedVehicle) {
-    //     this.tripForm.get('kilometers')?.setValue(selectedVehicle.current_km);
-    //   }
-    //   this.tripForm.get('kilometers')?.updateValueAndValidity(); // Update validity when vehicle changes
-    // });
+    this.checkUsernameAndOpenModal();
 
     this.tripForm.get('job')?.valueChanges.subscribe((value) => {
       this.cdr.detectChanges();
@@ -88,16 +79,23 @@ export class AccountPage implements OnInit {
     });
   }
 
+  checkUsernameAndOpenModal() {
+    const username = this.profileForm.get('username')?.value;
+    if (!username) {
+      this.isModalOpen = true; // Open the modal if the username is empty or null
+    }
+  }
+
   onVehicleChange(event: any) {
     const vehicleId = event.detail.value; // Get the selected vehicle ID from the event
     const selectedVehicle = this.vehicles.find(
       (vehicle) => vehicle.id === vehicleId
     );
-  
+
     if (selectedVehicle) {
       this.tripForm.get('kilometers')?.setValue(selectedVehicle.current_km);
     }
-  
+
     this.tripForm.get('kilometers')?.updateValueAndValidity();
   }
 
@@ -188,6 +186,6 @@ export class AccountPage implements OnInit {
   }
 
   onWillDismiss(event: Event) {
-    const ev = event as CustomEvent<OverlayEventDetail<string>>;
+      const ev = event as CustomEvent<OverlayEventDetail<string>>;
   }
 }
