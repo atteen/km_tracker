@@ -179,6 +179,8 @@ export class AccountPage implements OnInit {
       }
       await loader.dismiss();
       await this.supabase.createNotice('Profile updated!');
+      this.getProfile();
+      this.isModalOpen = false;
     } catch (error: any) {
       await loader.dismiss();
       await this.supabase.createNotice(error.message);
@@ -186,6 +188,6 @@ export class AccountPage implements OnInit {
   }
 
   onWillDismiss(event: Event) {
-      const ev = event as CustomEvent<OverlayEventDetail<string>>;
+    const ev = event as CustomEvent<OverlayEventDetail<string>>;
   }
 }
