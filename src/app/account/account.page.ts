@@ -180,7 +180,7 @@ export class AccountPage implements OnInit {
       await loader.dismiss();
       await this.supabase.createNotice('Profile updated!');
       this.getProfile();
-      this.modal.dismiss(null, 'cancel');
+      this.modal.dismiss(null, 'close');
     } catch (error: any) {
       await loader.dismiss();
       await this.supabase.createNotice(error.message);
