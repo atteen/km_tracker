@@ -10,7 +10,7 @@ import {
 import { Profile, SupabaseService } from '../supabase.service';
 import { IonModal } from '@ionic/angular';
 import { OverlayEventDetail } from '@ionic/core/components';
-import { Driver, Vehicle } from '../models';
+import { Driver, Vehicle, Job } from '../models';
 
 @Component({
   selector: 'app-account',
@@ -20,6 +20,7 @@ import { Driver, Vehicle } from '../models';
 export class AccountPage implements OnInit {
   drivers: Driver[] = [];
   vehicles: Vehicle[] = [];
+  jobs: Job[] = [];
 
   tripForm: FormGroup;
   profileForm: FormGroup;
@@ -69,11 +70,13 @@ export class AccountPage implements OnInit {
     this.getProfile();
     this.drivers = await this.supabase.getDrivers();
     this.vehicles = await this.supabase.getVehicles();
+    this.jobs = await this.supabase.getJobs();
+
     this.checkUsernameAndOpenModal();
 
-    this.tripForm.get('job')?.valueChanges.subscribe((value) => {
-      this.cdr.detectChanges();
-    });
+    // this.tripForm.get('job')?.valueChanges.subscribe((value) => {
+    //   this.cdr.detectChanges();
+    // });
     this.tripForm.get('kilometers')?.valueChanges.subscribe((value) => {
       this.cdr.detectChanges(); // Manually trigger change detection
     });
@@ -180,7 +183,7 @@ export class AccountPage implements OnInit {
       await loader.dismiss();
       await this.supabase.createNotice('Profile updated!');
       this.getProfile();
-      this.modal.dismiss(null, 'cancel');
+      this.modal.dismiss(null, 'close');
     } catch (error: any) {
       await loader.dismiss();
       await this.supabase.createNotice(error.message);

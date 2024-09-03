@@ -11,7 +11,11 @@ const routes: Routes = [
     path: 'account',
     loadChildren: () =>
       import('./account/account.module').then((m) => m.AccountPageModule),
+  },  {
+    path: 'tracking-analytics',
+    loadChildren: () => import('./tracking-analytics/tracking-analytics.module').then( m => m.TrackingAnalyticsPageModule)
   },
+
 
 
 ];

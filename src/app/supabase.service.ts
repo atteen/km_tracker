@@ -7,7 +7,7 @@ import {
   SupabaseClient,
 } from '@supabase/supabase-js';
 import { environment } from '../environments/environment';
-import { Driver, Vehicle, Trip } from './models';
+import { Driver, Vehicle, Trip, Job } from './models';
 
 export interface Profile {
   username: string;
@@ -111,6 +111,16 @@ export class SupabaseService {
     }
 
     return data as Vehicle[];
+  }
+
+  async getJobs() : Promise<Job[]> {
+    let { data, error } = await this.supabase.from('jobs').select('*');    
+
+    if (error) {
+      throw error;
+    }
+
+    return data as Job[];
   }
 
   async logTrip(vehicleId: string, kilometers: number, job: string): Promise<Trip> {
