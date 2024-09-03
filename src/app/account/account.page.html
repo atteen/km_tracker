@@ -52,12 +52,7 @@
     <ng-container>
       <ion-item class="input-error">
         <label>Job</label>
-        <!-- <ion-input
-          class="ion-padding-horizontal"
-          type="text"
-          formControlName="job"
-        /> -->
-        <ion-select formControlName="job" >
+        <ion-select formControlName="job" class="ion-padding-horizontal">
           <ion-select-option
             *ngFor="let job of jobs"
             [value]="job.id"
