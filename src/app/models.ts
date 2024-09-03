@@ -18,3 +18,9 @@ export interface Trip {
   kilometers: number;
   trip_date: string;
 }
+
+export interface Job {
+  id: string;
+  name: string;
+  client: string;
+}
