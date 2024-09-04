@@ -29,7 +29,7 @@ export class AccountPage implements OnInit {
     { type: 'required', message: 'field cannot be empty' },
     {
       type: 'invalidKilometers',
-      message: 'Km cannot be less than the current km',
+      message: 'Km cannot be the same/less than the current km',
     },
   ];
 
@@ -108,7 +108,7 @@ export class AccountPage implements OnInit {
       const selectedVehicle = this.vehicles.find(
         (vehicle) => vehicle.id === vehicleId
       );
-      if (selectedVehicle && control.value < selectedVehicle.current_km) {
+      if (selectedVehicle && control.value <= selectedVehicle.current_km) {
         return { invalidKilometers: true };
       }
       return null;
@@ -192,5 +192,9 @@ export class AccountPage implements OnInit {
 
   onWillDismiss(event: Event) {
     const ev = event as CustomEvent<OverlayEventDetail<string>>;
+  }
+
+  goToAdmin() {
+    this.router.navigate(['/tracking-analytics']);
   }
 }
