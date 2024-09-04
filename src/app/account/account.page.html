@@ -19,7 +19,10 @@
   <form class="ion-margin" [formGroup]="tripForm" (ngSubmit)="logTrip()">
     <ion-item>
       <ion-label>Vehicle</ion-label>
-      <ion-select formControlName="vehicleId" (ionChange)="onVehicleChange($event)">
+      <ion-select
+        formControlName="vehicleId"
+        (ionChange)="onVehicleChange($event)"
+      >
         <ion-select-option
           *ngFor="let vehicle of vehicles"
           [value]="vehicle.id"
@@ -53,10 +56,7 @@
       <ion-item class="input-error">
         <label>Job</label>
         <ion-select formControlName="job" class="ion-padding-horizontal">
-          <ion-select-option
-            *ngFor="let job of jobs"
-            [value]="job.id"
-          >
+          <ion-select-option *ngFor="let job of jobs" [value]="job.id">
             {{ job.name }}
           </ion-select-option>
         </ion-select>
@@ -77,7 +77,13 @@
     <ion-button expand="full" type="submit">Log Trip</ion-button>
   </form>
 
-  <ion-modal trigger="open-modal" [isOpen]="isModalOpen" (willDismiss)="onWillDismiss($event)">
+  <!-- <ion-button (click)="goToAdmin()">admin</ion-button> -->
+
+  <ion-modal
+    trigger="open-modal"
+    [isOpen]="isModalOpen"
+    (willDismiss)="onWillDismiss($event)"
+  >
     <ng-template>
       <ion-header>
         <ion-toolbar class="ion-text-center">

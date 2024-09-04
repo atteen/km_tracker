@@ -193,4 +193,8 @@ export class AccountPage implements OnInit {
   onWillDismiss(event: Event) {
     const ev = event as CustomEvent<OverlayEventDetail<string>>;
   }
+
+  goToAdmin() {
+    this.router.navigate(['/tracking-analytics']);
+  }
 }
