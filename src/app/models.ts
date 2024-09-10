@@ -24,3 +24,9 @@ export interface Job {
   name: string;
   client: string;
 }
+
+export interface Profile {
+  username: string;
+  navatar_urlame: string;
+  website: string;
+}
