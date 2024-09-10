@@ -1,4 +1,4 @@
-<ion-header [translucent]="true">
+<ion-header>
   <ion-toolbar>
     <ion-row class="ion-padding-horizontal">
       <img
@@ -6,115 +6,134 @@
         src="../../assets/icon/msasmanlogo-removebg-preview.png"
       />
       <ion-title class="page-title">MSB</ion-title>
-      <ion-button id="open-modal" expand="block">Update profile</ion-button>
+      <ion-button id="open-modal" expand="block">Update Profile</ion-button>
     </ion-row>
   </ion-toolbar>
 </ion-header>
 
-<div class="ion-margin">
-  <ion-item> Logged in as {{ profile.username }} </ion-item>
-</div>
+<ion-content>
+  <!-- Trip Logging Section -->
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>Log a Trip</ion-card-title>
+    </ion-card-header>
 
-<ion-content [fullscreen]="true">
-  <form class="ion-margin" [formGroup]="tripForm" (ngSubmit)="logTrip()">
-    <ion-item>
-      <ion-label>Vehicle</ion-label>
-      <ion-select
-        formControlName="vehicleId"
-        (ionChange)="onVehicleChange($event)"
-      >
-        <ion-select-option
-          *ngFor="let vehicle of vehicles"
-          [value]="vehicle.id"
-        >
-          {{ vehicle.name }}
-        </ion-select-option>
-      </ion-select>
-    </ion-item>
-
-    <ion-item>
-      <ion-label>Kilometers</ion-label>
-      <ion-input
-        class="ion-padding-horizontal"
-        type="number"
-        formControlName="kilometers"
-      ></ion-input>
-    </ion-item>
-    <div *ngFor="let er of errors" class="validation-errors">
-      <div
-        class="ion-padding-horizontal"
-        *ngIf="tripForm.get('kilometers')?.hasError(er.type) && (tripForm.get('kilometers')?.dirty || tripForm.get('kilometers')?.touched)"
-      >
-        <span class="error-message"
-          ><ion-icon class="error-icon" name="information-circle-outline" /> {{
-          er.message }}</span
-        >
-      </div>
-    </div>
-
-    <ng-container>
-      <ion-item class="input-error">
-        <label>Job</label>
-        <ion-select formControlName="job" class="ion-padding-horizontal">
-          <ion-select-option *ngFor="let job of jobs" [value]="job.id">
-            {{ job.name }}
-          </ion-select-option>
-        </ion-select>
-      </ion-item>
-      <div *ngFor="let er of errors" class="validation-errors">
-        <div
-          class="ion-padding-horizontal"
-          *ngIf="tripForm.get('job')?.hasError(er.type) && (tripForm.get('job')?.dirty || tripForm.get('job')?.touched)"
-        >
-          <span class="error-message"
-            ><ion-icon class="error-icon" name="information-circle-outline" />
-            {{ er.message }}</span
+    <ion-card-content>
+      <form [formGroup]="tripForm">
+        <ion-item>
+          <ion-label>Vehicle</ion-label>
+          <ion-select
+            formControlName="vehicleId"
+            (ionChange)="onVehicleChange($event)"
           >
+            <ion-select-option
+              *ngFor="let vehicle of vehicles"
+              [value]="vehicle.id"
+            >
+              {{ vehicle.name }}
+            </ion-select-option>
+          </ion-select>
+        </ion-item>
+
+        <ion-item>
+          <ion-label position="floating">Kilometers</ion-label>
+          <ion-input type="number" formControlName="kilometers"></ion-input>
+        </ion-item>
+        <div
+          class="error-message"
+          *ngIf="tripForm.get('kilometers')?.errors?.['invalidKilometers']"
+        >
+          {{ errors[1].message }}
         </div>
-      </div>
-    </ng-container>
 
-    <ion-button expand="full" type="submit">Log Trip</ion-button>
-  </form>
-  <!-- <ion-button (click)="goToAdmin()">admin</ion-button> -->
+        <ion-item class="input-error">
+          <label>Job</label>
+          <ion-select formControlName="job" class="ion-padding-horizontal">
+            <ion-select-option *ngFor="let job of jobs" [value]="job.id">
+              {{ job.name }}
+            </ion-select-option>
+          </ion-select>
+        </ion-item>
+        <div *ngFor="let er of errors" class="validation-errors">
+          <div
+            class="ion-padding-horizontal"
+            *ngIf="tripForm.get('job')?.hasError(er.type) && (tripForm.get('job')?.dirty || tripForm.get('job')?.touched)"
+          >
+            <span class="error-message"
+              ><ion-icon class="error-icon" name="information-circle-outline" />
+              {{ er.message }}</span
+            >
+          </div>
+        </div>
 
-  <ion-modal
-    trigger="open-modal"
-    [isOpen]="isModalOpen"
-    (willDismiss)="onWillDismiss($event)"
-  >
+        <ion-button expand="block" (click)="logTrip()">Log Trip</ion-button>
+      </form>
+    </ion-card-content>
+  </ion-card>
+
+            <!-- Profile Modal Section -->
+  <ion-modal trigger="open-modal" (willDismiss)="onWillDismiss($event)">
     <ng-template>
       <ion-header>
-        <ion-toolbar class="ion-text-center">
+        <ion-toolbar>
           <ion-buttons slot="start">
             <ion-button (click)="cancel()">Cancel</ion-button>
           </ion-buttons>
-          <ion-title>Update Profile</ion-title>
-          <ion-buttons slot="end">
-            <ion-button (click)="confirm()" [strong]="true">Confirm</ion-button>
-          </ion-buttons>
+          <ion-title>Profile</ion-title>
         </ion-toolbar>
       </ion-header>
       <ion-content class="ion-padding">
+        <ion-card>
+          <ion-card-content>
+            <form [formGroup]="profileForm">
+              <ion-item>
+                <ion-label position="floating">Email</ion-label>
+                <ion-input
+                  formControlName="email"
+                  [disabled]="true"
+                ></ion-input>
+              </ion-item>
+
+              <ion-item>
+                <ion-label position="floating">Username</ion-label>
+                <ion-input formControlName="username"></ion-input>
+              </ion-item>
+
+              <ion-button expand="block" (click)="confirm()"
+                >Update Profile</ion-button
+              >
+            </form>
+          </ion-card-content>
+
+          <!-- Sign Out Section -->
+          <ion-card-content>
+            <ion-button expand="block" color="danger" (click)="signOut()"
+              >Sign Out</ion-button
+            >
+          </ion-card-content>
+        </ion-card>
+      </ion-content>
+    </ng-template>
+  </ion-modal>
+
+  <!-- Modal for missing username -->
+  <ion-modal [isOpen]="isModalOpen" (willDismiss)="onWillDismiss($event)">
+    <ng-template>
+      <ion-header>
+        <ion-toolbar>
+          <ion-title>Set Username</ion-title>
+        </ion-toolbar>
+      </ion-header>
+      <ion-content>
         <form [formGroup]="profileForm">
           <ion-item>
-            <ion-label position="stacked">Email</ion-label>
-            <ion-input
-              type="email"
-              formControlName="email"
-              readonly
-            ></ion-input>
+            <ion-label position="floating">Username</ion-label>
+            <ion-input formControlName="username"></ion-input>
           </ion-item>
 
-          <ion-item>
-            <ion-label position="stacked">Name</ion-label>
-            <ion-input type="text" formControlName="username"></ion-input>
-          </ion-item>
+          <ion-button expand="block" (click)="confirm()">Save</ion-button>
+          <ion-button expand="block" (click)="cancel()">Cancel</ion-button>
         </form>
-
-        <div class="ion-text-center">
-          <ion-button fill="clear" (click)="signOut()">Log Out</ion-button>
-        </div>
       </ion-content>
     </ng-template>
   </ion-modal>

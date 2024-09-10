@@ -27,6 +27,6 @@ export interface Job {
 
 export interface Profile {
   username: string;
-  navatar_urlame: string;
   website: string;
+  avatar_url: string;
 }
