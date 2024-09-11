@@ -1,4 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
+import { Store } from '@ngxs/store';
+import { TripAction } from '../store/trip/trip.actions';
+
 
 @Component({
   selector: 'app-tracking-analytics',
@@ -7,7 +10,11 @@ import { Component, OnInit } from '@angular/core';
 })
 export class TrackingAnalyticsPage implements OnInit {
 
-  constructor() { }
+  private _store = inject(Store)
+
+  constructor() {
+    this._store.dispatch(new TripAction.Get())
+   }
 
   ngOnInit() {
   }
