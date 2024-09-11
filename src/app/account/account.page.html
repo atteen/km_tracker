@@ -36,14 +36,23 @@
         </ion-item>
 
         <ion-item>
-          <ion-label position="floating">Kilometers</ion-label>
-          <ion-input type="number" formControlName="kilometers"></ion-input>
+          <ion-label>Kilometers</ion-label>
+          <ion-input
+            class="ion-padding-horizontal"
+            type="number"
+            formControlName="kilometers"
+          ></ion-input>
         </ion-item>
-        <div
-          class="error-message"
-          *ngIf="tripForm.get('kilometers')?.errors?.['invalidKilometers']"
-        >
-          {{ errors[1].message }}
+        <div *ngFor="let er of errors" class="validation-errors">
+          <div
+            class="ion-padding-horizontal"
+            *ngIf="tripForm.get('kilometers')?.hasError(er.type) && (tripForm.get('kilometers')?.dirty || tripForm.get('kilometers')?.touched)"
+          >
+            <span class="error-message"
+              ><ion-icon class="error-icon" name="information-circle-outline" /> {{
+              er.message }}</span
+            >
+          </div>
         </div>
 
         <ion-item class="input-error">
