@@ -24,3 +24,9 @@ export interface Job {
   name: string;
   client: string;
 }
+
+export interface Profile {
+  username: string;
+  website: string;
+  avatar_url: string;
+}

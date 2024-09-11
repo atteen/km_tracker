@@ -7,13 +7,13 @@ import {
   SupabaseClient,
 } from '@supabase/supabase-js';
 import { environment } from '../environments/environment';
-import { Driver, Vehicle, Trip, Job } from './models';
+import { Driver, Vehicle, Trip, Job, Profile } from './models';
 
-export interface Profile {
-  username: string;
-  website: string;
-  avatar_url: string;
-}
+// export interface Profile {
+//   username: string;
+//   website: string;
+//   avatar_url: string;
+// }
 
 @Injectable({
   providedIn: 'root',

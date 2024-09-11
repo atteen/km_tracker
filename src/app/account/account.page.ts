@@ -7,10 +7,23 @@ import {
   ValidatorFn,
   AbstractControl,
 } from '@angular/forms';
-import { Profile, SupabaseService } from '../supabase.service';
 import { IonModal } from '@ionic/angular';
 import { OverlayEventDetail } from '@ionic/core/components';
+import { Store } from '@ngxs/store';
+import {
+  GetEmail,
+  GetProfile,
+  UpdateProfile,
+} from '../store/profile/profile.actions';
+import { GetDrivers } from '../store/driver/driver.actions';
+import { GetVehicles } from '../store/vehicle/vehicle.actions';
+import { GetJobs } from '../store/job/job.actions';
+import { ProfileState } from '../store/profile/profile.state';
+import { DriverState } from '../store/driver/driver.state';
+import { VehicleState } from '../store/vehicle/vehicle.state';
+import { JobState } from '../store/job/job.state';
 import { Driver, Vehicle, Job } from '../models';
+import { SupabaseService } from '../supabase.service';
 
 @Component({
   selector: 'app-account',
@@ -33,7 +46,7 @@ export class AccountPage implements OnInit {
     },
   ];
 
-  profile: Profile = {
+  profile = {
     username: '',
     avatar_url: '',
     website: '',
@@ -41,10 +54,12 @@ export class AccountPage implements OnInit {
 
   email = '';
   isModalOpen = false;
+  isProfileModalOpen = false;
 
   constructor(
-    private readonly supabase: SupabaseService,
+    private store: Store,
     private router: Router,
+    private readonly supabase: SupabaseService,
     private cdr: ChangeDetectorRef
   ) {
     this.tripForm = new FormGroup({
@@ -66,18 +81,42 @@ export class AccountPage implements OnInit {
   @ViewChild(IonModal) modal!: IonModal;
 
   async ngOnInit() {
-    this.getEmail();
-    this.getProfile();
-    this.drivers = await this.supabase.getDrivers();
-    this.vehicles = await this.supabase.getVehicles();
-    this.jobs = await this.supabase.getJobs();
+    // Dispatch actions to fetch data
+    this.store.dispatch(new GetProfile());
+    this.store.dispatch(new GetDrivers());
+    this.store.dispatch(new GetVehicles());
+    this.store.dispatch(new GetJobs());
+    this.store.dispatch(new GetEmail());
 
-    this.checkUsernameAndOpenModal();
+    // Subscribe to NGXS state changes
+    this.store.select(ProfileState.getProfile).subscribe((profile) => {
+      if (profile) {
+        this.profile = profile;
+        this.profileForm.patchValue(profile);
+        this.checkUsernameAndOpenModal();
+      }
+    });
 
-    // this.tripForm.get('job')?.valueChanges.subscribe((value) => {
-    //   this.cdr.detectChanges();
-    // });
-    this.tripForm.get('kilometers')?.valueChanges.subscribe((value) => {
+    this.store.select(ProfileState.getEmail).subscribe((email) => {
+      if (email) {
+        this.email = email;
+        this.profileForm.get('email')?.setValue(email);
+      }
+    });
+
+    this.store.select(DriverState.getDrivers).subscribe((drivers) => {
+      this.drivers = drivers;
+    });
+
+    this.store.select(VehicleState.getVehicles).subscribe((vehicles) => {
+      this.vehicles = vehicles;
+    });
+
+    this.store.select(JobState.getJobs).subscribe((jobs) => {
+      this.jobs = jobs;
+    });
+
+    this.tripForm.get('kilometers')?.valueChanges.subscribe(() => {
       this.cdr.detectChanges(); // Manually trigger change detection
     });
   }
@@ -115,26 +154,6 @@ export class AccountPage implements OnInit {
     };
   }
 
-  async getEmail() {
-    this.email = await this.supabase.user.then((user) => user?.email || '');
-    this.profileForm.get('email')?.setValue(this.email);
-  }
-
-  async getProfile() {
-    try {
-      const { data: profile, error, status } = await this.supabase.profile;
-      if (error && status !== 406) {
-        throw error;
-      }
-      if (profile) {
-        this.profile = profile;
-        this.profileForm.patchValue(profile);
-      }
-    } catch (error: any) {
-      alert(error.message);
-    }
-  }
-
   async logTrip() {
     const loader = await this.supabase.createLoader();
     await loader.present();
@@ -147,7 +166,7 @@ export class AccountPage implements OnInit {
       await this.supabase.createNotice('Trip Logged!');
     } catch (error: any) {
       await loader.dismiss();
-      await this.supabase.createNotice(error.message);
+      await this.createNotice(error.message);
     }
   }
 
@@ -156,11 +175,19 @@ export class AccountPage implements OnInit {
     await loader.present();
 
     try {
+      // Dispatch sign out logic here
       await this.supabase.signOut();
-      this.router.navigate(['/'], { replaceUrl: true });
       await loader.dismiss();
-      await this.supabase.createNotice('Logged Out');
-    } catch (error: any) {}
+      await this.createNotice('Logged Out');
+      this.modal.dismiss(null, 'close');
+      this.router.navigate(['/'], { replaceUrl: true });
+    } catch (error: any) {
+      await loader.dismiss();
+    }
+  }
+
+  openProfile() {
+    this.isProfileModalOpen = true;
   }
 
   cancel() {
@@ -170,23 +197,20 @@ export class AccountPage implements OnInit {
   async confirm(avatar_url: string = '') {
     const loader = await this.supabase.createLoader();
     await loader.present();
+
     try {
       const updatedProfile = {
         ...this.profile,
         ...this.profileForm.value,
         avatar_url,
       };
-      const { error } = await this.supabase.updateProfile(updatedProfile);
-      if (error) {
-        throw error;
-      }
+      await this.store.dispatch(new UpdateProfile(updatedProfile)).toPromise();
       await loader.dismiss();
-      await this.supabase.createNotice('Profile updated!');
-      this.getProfile();
+      await this.createNotice('Profile updated!');
       this.modal.dismiss(null, 'close');
     } catch (error: any) {
       await loader.dismiss();
-      await this.supabase.createNotice(error.message);
+      await this.createNotice(error.message);
     }
   }
 
@@ -196,5 +220,24 @@ export class AccountPage implements OnInit {
 
   goToAdmin() {
     this.router.navigate(['/tracking-analytics']);
+  }
+
+  // Helper methods for loading and notifications
+  async createLoader() {
+    return await new Promise((resolve) => {
+      // Simulate a loader creation here
+      resolve({
+        present: () => Promise.resolve(),
+        dismiss: () => Promise.resolve(),
+      });
+    });
+  }
+
+  async createNotice(message: string) {
+    return await new Promise((resolve) => {
+      // Simulate a toast or notice
+      console.log(message);
+      resolve(true);
+    });
   }
 }
