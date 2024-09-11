@@ -75,7 +75,7 @@
           </div>
         </div>
 
-        <ion-button expand="block" (click)="logTrip()">Log Trip</ion-button>
+        <ion-button [disabled]="!tripForm.valid" expand="block" (click)="logTrip()">Log Trip</ion-button>
       </form>
     </ion-card-content>
   </ion-card>
