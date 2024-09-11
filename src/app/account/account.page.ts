@@ -160,9 +160,10 @@ export class AccountPage implements OnInit {
 
     try {
       const { vehicleId, kilometers, job } = this.tripForm.value;
-      // Add your trip logging logic here using the Supabase service
+      await this.supabase.logTrip(vehicleId, kilometers, job);
+      await this.supabase.updateVehicleKm(vehicleId, kilometers); // Update the vehicle's kilometers
       await loader.dismiss();
-      await this.createNotice('Trip Logged!');
+      await this.supabase.createNotice('Trip Logged!');
     } catch (error: any) {
       await loader.dismiss();
       await this.createNotice(error.message);
