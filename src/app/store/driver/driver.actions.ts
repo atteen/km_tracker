@@ -1,3 +1,5 @@
-export class GetDrivers {
-  static readonly type = '[Drivers] Get Drivers';
+export namespace DriverAction {
+  export class Get {
+    static readonly type = '[Drivers] Get';
+  }
 }
