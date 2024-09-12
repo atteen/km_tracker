@@ -12,5 +12,8 @@
   </ion-header>
 
   <ng-container>
+    <ion-button *ngFor="let vehicle of vehicles">
+      {{ vehicle.name }}
+    </ion-button>
   </ng-container>
 </ion-content>
