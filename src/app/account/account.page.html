@@ -80,7 +80,9 @@
     </ion-card-content>
   </ion-card>
 
-            <!-- Profile Modal Section -->
+  <ion-button (click)="goToAdmin()">admin</ion-button>
+
+            <!-- Profile Modal -->
   <ion-modal trigger="open-modal" (willDismiss)="onWillDismiss($event)">
     <ng-template>
       <ion-header>

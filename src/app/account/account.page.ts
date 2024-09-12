@@ -24,6 +24,8 @@ import { VehicleState } from '../store/vehicle/vehicle.state';
 import { JobState } from '../store/job/job.state';
 import { Driver, Vehicle, Job } from '../models';
 import { SupabaseService } from '../supabase.service';
+import { Platform } from '@ionic/angular';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-account',
@@ -31,6 +33,7 @@ import { SupabaseService } from '../supabase.service';
   styleUrls: ['./account.page.scss'],
 })
 export class AccountPage implements OnInit {
+  private subscription!: Subscription;
   drivers: Driver[] = [];
   vehicles: Vehicle[] = [];
   jobs: Job[] = [];
@@ -60,7 +63,8 @@ export class AccountPage implements OnInit {
     private store: Store,
     private router: Router,
     private readonly supabase: SupabaseService,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    private platform: Platform
   ) {
     this.tripForm = new FormGroup({
       vehicleId: new FormControl(''),
@@ -119,6 +123,16 @@ export class AccountPage implements OnInit {
     this.tripForm.get('kilometers')?.valueChanges.subscribe(() => {
       this.cdr.detectChanges(); // Manually trigger change detection
     });
+  }
+
+  ionViewDidEnter() {
+    this.subscription = this.platform.backButton.subscribeWithPriority(9999, () => {
+      // do nothing
+    });
+  }
+
+  ionViewWillLeave() {
+    this.subscription.unsubscribe();
   }
 
   checkUsernameAndOpenModal() {
