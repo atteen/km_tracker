@@ -12,8 +12,13 @@
   </ion-header>
 
   <ng-container>
-    <ion-button *ngFor="let vehicle of vehicles">
-      {{ vehicle.name }}
-    </ion-button>
+    <ion-item class="input-error">
+      <label>Filter by:</label>
+      <ion-select interface="action-sheet" placeholder="Select filter" class="ion-padding-horizontal">
+        <ion-select-option *ngFor="let filter of filters" value="{{ filter }}">
+          {{ filter }}
+        </ion-select-option>
+      </ion-select>
+    </ion-item>
   </ng-container>
 </ion-content>

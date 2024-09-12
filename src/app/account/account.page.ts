@@ -15,7 +15,7 @@ import {
   GetProfile,
   UpdateProfile,
 } from '../store/profile/profile.actions';
-import { GetDrivers } from '../store/driver/driver.actions';
+import { DriverAction } from '../store/driver/driver.actions';
 import { GetVehicles } from '../store/vehicle/vehicle.actions';
 import { GetJobs } from '../store/job/job.actions';
 import { ProfileState } from '../store/profile/profile.state';
@@ -87,7 +87,7 @@ export class AccountPage implements OnInit {
   async ngOnInit() {
     // Dispatch actions to fetch data
     this.store.dispatch(new GetProfile());
-    this.store.dispatch(new GetDrivers());
+    this.store.dispatch(new DriverAction.Get());
     this.store.dispatch(new GetVehicles());
     this.store.dispatch(new GetJobs());
     this.store.dispatch(new GetEmail());

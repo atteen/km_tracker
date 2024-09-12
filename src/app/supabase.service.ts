@@ -123,6 +123,16 @@ export class SupabaseService {
     return data as Job[];
   }
 
+  async getTrips() : Promise<Trip[]> {
+    let { data, error } = await this.supabase.from('trips').select('*');    
+
+    if (error) {
+      throw error;
+    }
+
+    return data as Trip[];
+  }
+
   async logTrip(vehicleId: string, kilometers: number, job: string): Promise<Trip> {
     const user = await this.user;
     const { data, error } = await this.supabase
