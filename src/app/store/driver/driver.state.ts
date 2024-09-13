@@ -1,5 +1,5 @@
-import { State, Action, StateContext, Selector } from '@ngxs/store';
 import { Injectable } from '@angular/core';
+import { State, Action, StateContext, Selector } from '@ngxs/store';
 import { SupabaseService } from '../../supabase.service';
 import { DriverAction } from './driver.actions';
 import { Driver } from '../../models';

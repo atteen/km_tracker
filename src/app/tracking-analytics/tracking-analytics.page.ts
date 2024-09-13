@@ -2,7 +2,7 @@ import { Component, inject, OnInit } from '@angular/core';
 import { Store } from '@ngxs/store';
 import { Router } from '@angular/router';
 // import { TripAction } from '../store/trip/trip.actions';
-import { Driver, Vehicle, Job, Trip } from '../models';
+import { Driver, Vehicle, Job, Trip, AccumulatedKm } from '../models';
 
 import { DriverAction } from '../store/driver/driver.actions';
 import { DriverState } from '../store/driver/driver.state';
@@ -12,6 +12,8 @@ import { GetVehicles } from '../store/vehicle/vehicle.actions';
 import { VehicleState } from '../store/vehicle/vehicle.state';
 import { TripAction } from '../store/trip/trip.actions';
 import { TripState } from '../store/trip/trip.state';
+import { AccumulatedKmAction } from '../store/accumulated-km/accumulated-km.actions';
+import { AccumulatedKmState } from '../store/accumulated-km/accumulated-km.state';
 
 @Component({
   selector: 'app-tracking-analytics',
@@ -23,6 +25,7 @@ export class TrackingAnalyticsPage implements OnInit {
   vehicles: Vehicle[] = [];
   jobs: Job[] = [];
   trips: Trip[] = [];
+  accumulated_km: AccumulatedKm[] = [];
 
   filters = ['Drivers', 'Jobs', 'Vehicles'];
 
@@ -31,6 +34,7 @@ export class TrackingAnalyticsPage implements OnInit {
   ngOnInit() {
     this.store.dispatch(new DriverAction.Get());
     this.store.dispatch(new TripAction.Get());
+    this.store.dispatch(new AccumulatedKmAction.Get());
     this.store.dispatch(new GetVehicles());
     this.store.dispatch(new GetJobs());
 
@@ -49,5 +53,15 @@ export class TrackingAnalyticsPage implements OnInit {
     this.store.select(JobState.getJobs).subscribe((jobs) => {
       this.jobs = jobs;
     });
+
+    this.store.select(AccumulatedKmState.getAccumulatedKm).subscribe((accumulated_km) => {
+      this.accumulated_km = accumulated_km;
+    });
+
+    console.log('drivers: ', JSON.parse(JSON.stringify(this.drivers)))
+    console.log('trips: ', JSON.parse(JSON.stringify(this.trips)))
+    console.log('vehicles: ', JSON.parse(JSON.stringify(this.vehicles)))
+    console.log('jobs: ', JSON.parse(JSON.stringify(this.jobs)))
+    console.log('accumulated_km: ', JSON.parse(JSON.stringify(this.accumulated_km)))
   }
 }
