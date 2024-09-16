@@ -25,6 +25,13 @@ export interface Job {
   client: string;
 }
 
+export interface AccumulatedKm {
+  id: string;
+  vehicle_id: string;
+  job_id: string;
+  accumulated_km: number;
+}
+
 export interface Profile {
   username: string;
   website: string;

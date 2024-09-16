@@ -16,6 +16,8 @@ import { ProfileState } from './store/profile/profile.state';
 import { DriverState } from './store/driver/driver.state';
 import { VehicleState } from './store/vehicle/vehicle.state';
 import { JobState } from './store/job/job.state';
+import { AccumulatedKmState } from './store/accumulated-km/accumulated-km.state';
+import { NgxChartsModule } from '@swimlane/ngx-charts';
 
 @NgModule({
   declarations: [AppComponent],
@@ -25,11 +27,12 @@ import { JobState } from './store/job/job.state';
     AppRoutingModule,
     ReactiveFormsModule,
     NgxsModule.forRoot(
-      [TripState, ProfileState, DriverState, VehicleState, JobState],
+      [TripState, ProfileState, DriverState, VehicleState, JobState, AccumulatedKmState],
       { developmentMode: /** !environment.production */ false }
     ),
     NgxsReduxDevtoolsPluginModule.forRoot(),
     NgxsLoggerPluginModule.forRoot(),
+    NgxChartsModule,
   ],
   providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy }],
   bootstrap: [AppComponent],

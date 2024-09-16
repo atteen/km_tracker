@@ -7,7 +7,7 @@ import {
   SupabaseClient,
 } from '@supabase/supabase-js';
 import { environment } from '../environments/environment';
-import { Driver, Vehicle, Trip, Job, Profile } from './models';
+import { Driver, Vehicle, Trip, Job, Profile, AccumulatedKm } from './models';
 
 // export interface Profile {
 //   username: string;
@@ -131,6 +131,16 @@ export class SupabaseService {
     }
 
     return data as Trip[];
+  }
+
+  async getAccumulatedKms() : Promise<AccumulatedKm[]> {
+    let { data, error } = await this.supabase.from('accumulated_km_per_job').select('*');    
+
+    if (error) {
+      throw error;
+    }
+
+    return data as AccumulatedKm[];
   }
 
   async logTrip(vehicleId: string, kilometers: number, job: string): Promise<Trip> {

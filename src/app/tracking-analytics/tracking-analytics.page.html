@@ -14,11 +14,43 @@
   <ng-container>
     <ion-item class="input-error">
       <label>Filter by:</label>
-      <ion-select interface="action-sheet" placeholder="Select filter" class="ion-padding-horizontal">
+      <ion-select
+        interface="action-sheet"
+        placeholder="Select filter"
+        class="ion-padding-horizontal"
+      >
         <ion-select-option *ngFor="let filter of filters" value="{{ filter }}">
           {{ filter }}
         </ion-select-option>
       </ion-select>
     </ion-item>
+
+    <ion-card class="ion-padding">
+      <h2>Total Kilometers Driven: {{ grandTotalKm }}</h2>
+    </ion-card>
+
+    <!-- Pie chart to show total km per vehicle -->
+    <ion-card>
+      <ngx-charts-pie-chart
+        [results]="pieChartData"
+        [legend]="false"
+        [labels]="true"
+        [doughnut]="false"
+        [animations]="true"
+        [explodeSlices]="false"
+        [scheme]="colorScheme"
+        [view]="view"
+      >
+      </ngx-charts-pie-chart>
+    </ion-card>
+
+    <ion-card class="ion-padding" *ngFor="let group of grouped_kms">
+      <h2>Vehicle: {{ getVehicleName(group.vehicleId) }}</h2>
+      <h3>Total Kilometers: {{ group.totalKm }}</h3>
+      <div class="ion-padding-vertical" *ngFor="let acckm of group.kms">
+        <p>Job: {{ getJobName(acckm.job_id) }}</p>
+        <p>Kilometers: {{ acckm.accumulated_km }}</p>
+      </div>
+    </ion-card>
   </ng-container>
 </ion-content>
