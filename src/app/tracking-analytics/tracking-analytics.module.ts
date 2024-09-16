@@ -7,13 +7,15 @@ import { IonicModule } from '@ionic/angular';
 import { TrackingAnalyticsPageRoutingModule } from './tracking-analytics-routing.module';
 
 import { TrackingAnalyticsPage } from './tracking-analytics.page';
+import { NgxChartsModule } from '@swimlane/ngx-charts';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    TrackingAnalyticsPageRoutingModule
+    TrackingAnalyticsPageRoutingModule,
+    NgxChartsModule
   ],
   declarations: [TrackingAnalyticsPage]
 })
