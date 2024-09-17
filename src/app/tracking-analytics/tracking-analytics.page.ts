@@ -1,6 +1,8 @@
-import { Component, HostListener, Input, OnInit } from '@angular/core';
+import { Component, HostListener, Input, OnInit, ViewChild } from '@angular/core';
 import { Store } from '@ngxs/store';
 import { Router } from '@angular/router';
+import { IonModal } from '@ionic/angular';
+import { OverlayEventDetail } from '@ionic/core/components';
 import { Driver, Vehicle, Job, Trip, AccumulatedKm } from '../models';
 
 import { DriverAction } from '../store/driver/driver.actions';
@@ -21,6 +23,7 @@ import { Platform } from '@ionic/angular';
   styleUrls: ['./tracking-analytics.page.scss'],
 })
 export class TrackingAnalyticsPage implements OnInit {
+  isModalOpen = false;
   drivers: Driver[] = [];
   vehicles: Vehicle[] = [];
   jobs: Job[] = [];
@@ -38,6 +41,7 @@ export class TrackingAnalyticsPage implements OnInit {
   colorScheme: any = {
     domain: ['#5AA454', '#A10A28', '#C7B42C', '#AAAAAA']
   };
+  group2: any;
 
   constructor(private store: Store, private router: Router, private platform: Platform) {}
 
@@ -134,5 +138,12 @@ export class TrackingAnalyticsPage implements OnInit {
   getJobName(jobId: string): string {
     const job = this.jobs.find((j) => j.id === jobId);
     return job ? job.name : 'Unknown job';
+  }
+
+  setOpen(isOpen: boolean, group: any) {
+    this.isModalOpen = isOpen;
+    this.group2 = group
+    console.log(this.isModalOpen);
+    
   }
 }
